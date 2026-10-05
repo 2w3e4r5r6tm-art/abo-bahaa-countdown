@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>العد التنازلي للثانوية - Mohamed Abo Bahaa</title>
+    <style>
+        body {
+            font-family: 'Cairo', Tahoma, sans-serif;
+            background-color: #0b0f19;
+            color: #f8fafc;
+            margin: 0;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            direction: rtl;
+        }
+        .container {
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .header-title {
+            font-size: 14pt;
+            color: #38bdf8;
+            margin-bottom: 3px;
+            font-weight: bold;
+        }
+        .sub-title {
+            font-size: 8.5pt;
+            color: #94a3b8;
+            margin-bottom: 15px;
+        }
+        /* شاشة اختيار القسم */
+        .select-screen {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 30px;
+        }
+        .section-btn {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            border: 1px solid #38bdf8;
+            color: #f8fafc;
+            padding: 18px;
+            border-radius: 14px;
+            font-size: 11pt;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .section-btn:active {
+            transform: scale(0.97);
+            background: #38bdf8;
+            color: #0b0f19;
+        }
+        /* شاشة العد التنازلي */
+        .countdown-container {
+            display: none;
+        }
+        .section-box {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 14px;
+            padding: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .section-box h3 {
+            margin: 0 0 8px 0;
+            font-size: 10.5pt;
+            color: #38bdf8;
+        }
+        .countdown-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+        }
+        .time-card {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            padding: 8px 2px;
+        }
+        .time-card span {
+            display: block;
+            font-size: 13pt;
+            font-weight: bold;
+            color: #f1f5f9;
+        }
+        .time-card label {
+            font-size: 7.5pt;
+            color: #94a3b8;
+            margin-top: 2px;
+            display: block;
+        }
+        .quote-box {
+            background: linear-gradient(135deg, #1e293b, #111827);
+            border: 1px solid #38bdf8;
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(56, 189, 248, 0.1);
+        }
+        .quote-box h4 {
+            margin: 0 0 6px 0;
+            font-size: 9pt;
+            color: #38bdf8;
+        }
+        .quote-box p {
+            margin: 0;
+            font-size: 9.5pt;
+            color: #e2e8f0;
+            line-height: 1.5;
+        }
+        .action-btns {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        .btn-action {
+            flex: 1;
+            background-color: #10b981;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 8.5pt;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .btn-back {
+            background-color: #64748b;
+        }
+        .badge {
+            background-color: #38bdf8;
+            color: #0b0f19;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 8pt;
+            font-weight: bold;
+            display: inline-block;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .footer {
+            margin-top: 12px;
+            font-size: 7.5pt;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header-title">⏳ العد التنازلي للثانوية</div>
+        <div class="sub-title">اصنع حلمك وثابر لتصل إليه</div>
+
+        <!-- 1. شاشة اختيار القسم -->
+        <div id="selectScreen" class="select-screen">
+            <p style="color: #94a3b8; font-size: 9.5pt; margin: 0;">اختر مرحلتك التعليمية لعرض العداد المناسب:</p>
+            <button class="section-btn" onclick="selectSection('general')">📚 امتحانات الثانوية العامة</button>
+            <button class="section-btn" onclick="selectSection('azhar')">📖 امتحانات الثانوية الأزهرية</button>
+        </div>
+
+        <!-- 2. شاشة العد التنازلي (مخفية حتى يتم الاختيار) -->
+        <div id="countdownContainer" class="countdown-container">
+            <div class="section-box">
+                <h3 id="sectionTitle">📚 العد التنازلي</h3>
+                <div class="countdown-grid">
+                    <div class="time-card">
+                        <span id="days">--</span>
+                        <label>يوم</label>
+                    </div>
+                    <div class="time-card">
+                        <span id="hours">--</span>
+                        <label>ساعة</label>
+                    </div>
+                    <div class="time-card">
+                        <span id="minutes">--</span>
+                        <label>دقيقة</label>
+                    </div>
+                    <div class="time-card">
+                        <span id="seconds">--</span>
+                        <label>ثانية</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- الحكمة / الآية المتغيرة يومياً -->
+            <div class="quote-box">
+                <h4>💡 إشراقة اليوم</h4>
+                <p id="daily-quote">جاري تحميل رسالة اليوم...</p>
+            </div>
+
+            <!-- أزرار الإجراءات (مشاركة وتغيير القسم) -->
+            <div class="action-btns">
+                <button class="btn-action" onclick="shareApp()">📤 مشاركة التطبيق</button>
+                <button class="btn-action btn-back" onclick="goBack()">🔄 تغيير القسم</button>
+            </div>
+        </div>
+
+        <div class="badge">تطوير: Mohamed Abo Bahaa</div>
+        
+        <div class="footer">
+            بالتوفيق لكل طلاب مصر 🚀
+        </div>
+    </div>
+
+    <script>
+        // تواريخ الامتحانات بدقة (يونيو 2027)
+        const examsData = {
+            general: {
+                title: "📚 امتحانات الثانوية العامة",
+                time: new Date("2027-06-26T09:00:00").getTime()
+            },
+            azhar: {
+                title: "📖 امتحانات الثانوية الأزهرية",
+                time: new Date("2027-06-01T09:00:00").getTime()
+            }
+        };
+
+        let activeExamTime = 0;
+        let timerInterval = null;
+
+        function selectSection(type) {
+            document.getElementById('selectScreen').style.display = 'none';
+            document.getElementById('countdownContainer').style.display = 'block';
+            
+            document.getElementById('sectionTitle').innerText = examsData[type].title;
+            activeExamTime = examsData[type].time;
+
+            updateTimer();
+            if(timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+            
+            setDailyQuote();
+        }
+
+        function goBack() {
+            if(timerInterval) clearInterval(timerInterval);
+            document.getElementById('countdownContainer').style.display = 'none';
+            document.getElementById('selectScreen').style.display = 'flex';
+        }
+
+        function updateTimer() {
+            const now = new Date().getTime();
+            let distance = activeExamTime - now;
+
+            if (distance < 0) {
+                document.getElementById("days").innerText = "00";
+                document.getElementById("hours").innerText = "00";
+                document.getElementById("minutes").innerText = "00";
+                document.getElementById("seconds").innerText = "00";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = days < 10 ? "0" + days : days;
+            document.getElementById("hours").innerText = hours < 10 ? "0" + hours : hours;
+            document.getElementById("minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
+            document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
+        }
+
+        // إشراقات يومية
+        const quotes = [
+            "﴿وَأَنْ لَيْسَ لِلإِنسَانِ إِلَّا مَا سَعَى﴾ اصبر وتعبه هيبان قريب جداً 🌟",
+            "اصبر قليلاً فبعد العسر تيسير، وكل هم له من بعده فرج. 🚀",
+            "حلمك يستاهل تعب الليلة دي، كمل وماتقفش! 💪",
+            "إنا لا نضيع أجر من أحسن عملاً.. اجتهد واجعل هدفك قدام عيونك. 🔥",
+            "كل خطوة بتخطوها في المذاكرة بتقربك خطوة أكتر من كليتك. 🎓",
+            "اصنع لنفسك ذكراً حسناً ومجموعاً يرفع رأس أهلك. 🤍",
+            "التعب مبروك والنتيجة هتنسيك كل سهر ليالي. توكل على الله! ✨"
+        ];
+
+        function setDailyQuote() {
+            const today = new Date();
+            const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
+            document.getElementById("daily-quote").innerText = quotes[dayOfYear % quotes.length];
+        }
+
+        // وظيفة مشاركة التطبيق
+        function shareApp() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'العد التنازلي للثانوية',
+                    text: 'تابع عداد امتحانات الثانوية العامة والأزهرية وحمل التطبيق من تصميم Mohamed Abo Bahaa! 🚀',
+                    url: window.location.href
+                }).catch(() => {});
+            } else {
+                alert('تم نسخ رابط التطبيق أو شاركه مع أصدقائك لدعم "أبو بهاء"! 🤍');
+            }
+        }
+    </script>
+
+</body>
+</html>
